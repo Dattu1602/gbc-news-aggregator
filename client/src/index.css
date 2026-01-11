@@ -28,11 +28,11 @@
 
   /* Card Variants */
   .card-standard {
-    @apply flex flex-col gap-3 group cursor-pointer;
+    @apply flex flex-col gap-3 cursor-pointer;
   }
 
   .card-list-item {
-    @apply flex flex-col py-4 border-b border-gray-100 last:border-0 group cursor-pointer;
+    @apply flex flex-col py-4 border-b border-gray-100 last:border-0 cursor-pointer;
   }
 
   .magazine-title-hero {
