@@ -8,6 +8,7 @@ function App() {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [scrapeLoading, setScrapeLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [filters, setFilters] = useState({
     category: 'All',
     sentiment: 'All',
@@ -18,11 +19,13 @@ function App() {
 
   const fetchArticles = async () => {
     setLoading(true);
+    setError(null);
     try {
       const data = await getArticles(filters);
       setArticles(Array.isArray(data?.articles) ? data.articles : []);
     } catch (error) {
       console.error('Failed to fetch articles', error);
+      setError('Failed to connect to the server. Please check your connection or try again later.');
       setArticles([]);
     } finally {
       setLoading(false);
@@ -98,11 +101,20 @@ function App() {
             <Loader2 size={40} className="text-red-700 animate-spin mb-4" />
             <p className="text-sm font-bold text-gray-500 uppercase tracking-widest">Formatting Newsroom...</p>
           </div>
+        ) : error ? (
+          <div className="text-center py-40">
+            <div className="p-4 bg-red-50 text-red-700 rounded-md inline-block">
+              <h2 className="text-lg font-bold mb-2">Connection Error</h2>
+              <p>{error}</p>
+              <button onClick={fetchArticles} className="mt-4 px-4 py-2 bg-red-700 text-white rounded font-bold text-sm uppercase">Retry Connection</button>
+            </div>
+          </div>
         ) : articles.length === 0 ? (
           <div className="text-center py-40">
             <Newspaper size={64} className="mx-auto text-gray-200 mb-6" />
             <h2 className="text-2xl font-bold text-gray-900 mb-2">No Breaking News Found</h2>
             <p className="text-gray-500">Try adjusting your filters to discover more stories.</p>
+            <button onClick={fetchArticles} className="mt-4 underline text-sm text-gray-400">Refresh Feed</button>
           </div>
         ) : (
           <div className="space-y-12 mt-8">

@@ -12,7 +12,23 @@ app.use(cors());
 app.use(express.json());
 
 // Database
-connectDB();
+connectDB().then(async () => {
+    try {
+        const Article = require('./models/Article');
+        const { scrapeAll } = require('./services/scraper');
+
+        const count = await Article.countDocuments();
+        console.log(`Current Article Count: ${count}`);
+
+        if (count === 0) {
+            console.log("Database empty. Triggering initial scrape...");
+            const { newCount } = await scrapeAll();
+            console.log(`Initial scrape complete. New articles: ${newCount}`);
+        }
+    } catch (err) {
+        console.error("Initial scrape check failed:", err.message);
+    }
+});
 
 // Routes
 app.use('/api/articles', articleRoutes);

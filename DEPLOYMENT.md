@@ -14,6 +14,8 @@
    GEMINI_API_KEY=your_gemini_key
    PORT=5000
    ```
+   > [!IMPORTANT]
+   > **MongoDB Atlas Users:** Go to `Network Access` -> `Add IP Address` -> `Allow Access from Anywhere (0.0.0.0/0)` to ensure Render can connect.
 
 2. **Build & Start**
    - Install dependencies: `npm install`
